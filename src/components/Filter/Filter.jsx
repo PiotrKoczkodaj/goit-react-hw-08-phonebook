@@ -1,18 +1,31 @@
+import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { filterContactList } from 'redux/filterSlice/filterSlice';
+import { handleFilter } from 'redux/contacts/contactsSlice';
+import { Form } from 'react-bootstrap';
 
 export const Filter = () => {
+  const [filter, setFilter] = useState('');
   const dispatch = useDispatch();
 
-  const handleChange = e => {
-    let value = e.target.value.toLowerCase();
-    dispatch(filterContactList(value));
+  useEffect(() => {
+    dispatch(handleFilter(filter));
+  }, [filter, dispatch]);
+
+  const handleChange = evt => {
+    setFilter(evt.target.value);
   };
-  
+
   return (
-    <form>
-      <label>Find contact</label>
-      <input onChange={handleChange}></input>
-    </form>
+    <Form className="mb-1">
+      <Form.Group>
+        <Form.Label>Find contacts by Name</Form.Label>
+        <Form.Control
+          type="text"
+          name="filter"
+          value={filter}
+          onChange={handleChange}
+        />
+      </Form.Group>
+    </Form>
   );
 };
